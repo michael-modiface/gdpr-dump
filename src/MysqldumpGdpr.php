@@ -40,6 +40,8 @@ class MysqldumpGdpr extends Mysqldump
             unset($dumpSettings['debug-sql']);
         }
         parent::__construct($dsn, $user, $pass, $dumpSettings, $pdoSettings);
+        // Use object method as callback
+        $this->setTransformColumnValueHook([$this, 'hookTransformColumnValue']);
     }
 
     public function getColumnStmt($tableName)
@@ -61,7 +63,7 @@ class MysqldumpGdpr extends Mysqldump
         return $columnStmt;
     }
 
-    protected function hookTransformColumnValue($tableName, $colName, $colValue)
+    protected function hookTransformColumnValue($tableName, $colName, $colValue, $row)
     {
         if (!empty($this->gdprReplacements[$tableName][$colName])) {
             $replacement = ColumnTransformer::replaceValue($tableName, $colName, $this->gdprReplacements[$tableName][$colName]);
