@@ -7,6 +7,7 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use machbarmacher\GdprDump\ColumnTransformer\Plugins\ClearColumnTransformer;
 use machbarmacher\GdprDump\ColumnTransformer\Plugins\FakerColumnTransformer;
+use machbarmacher\GdprDump\ColumnTransformer\Plugins\FixedStringColumnTransformer;
 
 abstract class ColumnTransformer
 {
@@ -29,6 +30,8 @@ abstract class ColumnTransformer
               new FakerColumnTransformer());
             self::$dispatcher->addListener(self::COLUMN_TRANSFORM_REQUEST,
               new ClearColumnTransformer());
+            self::$dispatcher->addListener(self::COLUMN_TRANSFORM_REQUEST,
+              new FixedStringColumnTransformer());
         }
 
     }
